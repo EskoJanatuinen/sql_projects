@@ -1,2 +1,2 @@
 # sql_projects
-This repo consists of my work related projects.
+A collection of my work-related SQL queries.
