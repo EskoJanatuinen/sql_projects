@@ -20,12 +20,13 @@ SELECT
         WHEN '27' THEN 'Plan B'
         WHEN '28' THEN 'Näprä'
     END AS Pääryhmä,
-    COUNT(*) as Määrä
+    COUNT(*) as Määrä,
+    SUM(hinta) as Arvo
 FROM
     tuote t
     LEFT JOIN varsaldo v ON v.tuote = t.numero
-    AND t.perustettupvm >= 20210622
-    AND t.perustettupvm <= 20210622
+    AND t.perustettupvm >= 20211018
+    AND t.perustettupvm <= 20211024
 WHERE
     t.verkkokauppa = 1
     AND t.passiivinen = 0
@@ -36,12 +37,13 @@ UNION
 ALL
 SELECT
     'YHTEENSÄ' paaryhma,
-    COUNT(paaryhma)
+    COUNT(paaryhma),
+    SUM(hinta) as Arvo
 FROM
     tuote t
     LEFT JOIN varsaldo v ON v.tuote = t.numero
-    AND t.perustettupvm >= 20210622
-    AND t.perustettupvm <= 20210622
+    AND t.perustettupvm >= 20211018
+    AND t.perustettupvm <= 20211024
 WHERE
     t.verkkokauppa = 1
     AND t.passiivinen = 0
