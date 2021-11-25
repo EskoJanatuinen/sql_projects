@@ -19,14 +19,16 @@ SELECT
         WHEN '26' THEN 'Polkupyörät'
         WHEN '27' THEN 'Plan B'
         WHEN '28' THEN 'Näprä'
+        ELSE 'Muut ryhmät'
     END AS Pääryhmä,
     COUNT(*) as Määrä,
-    SUM(hinta) as Arvo
+    ROUND(AVG(Hinta), 1) as Keskihinta,
+    COUNT(*) * ROUND(AVG(Hinta), 1) AS Arvo
 FROM
     tuote t
     LEFT JOIN varsaldo v ON v.tuote = t.numero
-    AND t.perustettupvm >= 20211018
-    AND t.perustettupvm <= 20211024
+    AND t.perustettupvm >= 20211101
+    AND t.perustettupvm <= 20211124
 WHERE
     t.verkkokauppa = 1
     AND t.passiivinen = 0
@@ -37,13 +39,14 @@ UNION
 ALL
 SELECT
     'YHTEENSÄ' paaryhma,
-    COUNT(paaryhma),
-    SUM(hinta) as Arvo
+    COUNT(*),
+    ROUND(AVG(Hinta), 1) as Keskihinta,
+    COUNT(*) * ROUND(AVG(Hinta), 1) AS Arvo
 FROM
     tuote t
     LEFT JOIN varsaldo v ON v.tuote = t.numero
-    AND t.perustettupvm >= 20211018
-    AND t.perustettupvm <= 20211024
+    AND t.perustettupvm >= 20211101
+    AND t.perustettupvm <= 20211124
 WHERE
     t.verkkokauppa = 1
     AND t.passiivinen = 0
