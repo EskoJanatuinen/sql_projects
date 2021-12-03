@@ -21,16 +21,33 @@ SELECT
         WHEN '28' THEN 'Näprä'
         ELSE 'Muut ryhmät'
     END AS Pääryhmä,
-    COUNT(*) as Lkm,
-    CAST(AVG(BruttoPaino) AS DECIMAL(10, 2)) AS Keskipaino
+    COUNT(*) as Määrä,
+    ROUND(AVG(Hinta), 1) as Keskihinta,
+    COUNT(*) * ROUND(AVG(Hinta), 1) AS Arvo
 FROM
     tuote t
     LEFT JOIN varsaldo v ON v.tuote = t.numero
-    AND t.perustettupvm >= 20210101
-    AND t.perustettupvm <= 20211130
+    AND t.perustettupvm >= 20211101
+    AND t.perustettupvm <= 20211124
 WHERE
     t.verkkokauppa = 1
     AND t.passiivinen = 0
     AND v.varasto = 10
 GROUP BY
     paaryhma
+UNION
+ALL
+SELECT
+    'YHTEENSÄ' paaryhma,
+    COUNT(*),
+    ROUND(AVG(Hinta), 1) as Keskihinta,
+    COUNT(*) * ROUND(AVG(Hinta), 1) AS Arvo
+FROM
+    tuote t
+    LEFT JOIN varsaldo v ON v.tuote = t.numero
+    AND t.perustettupvm >= 20211101
+    AND t.perustettupvm <= 20211124
+WHERE
+    t.verkkokauppa = 1
+    AND t.passiivinen = 0
+    AND v.varasto = 10
